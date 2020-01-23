@@ -72,6 +72,26 @@ Use <code>chmod +x</code> to make it executable and then either place it at the 
   <span class="token property">load_config_file</span>       <span class="token punctuation">=</span> <span class="token boolean">false</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<h3><a class="anchor" aria-hidden="true" id="exec-plugin-support"></a><a href="#exec-plugin-support" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Exec Plugin Support</h3>
+<p>As with the Kubernetes Terraform Provider, this provider also supports using a <code>exec</code> based plugin (for example when running on EKS).</p>
+<pre><code class="hljs css language-hcl"><span class="token keyword">provider<span class="token type variable"> "kubectl" </span></span><span class="token punctuation">{</span>
+  <span class="token property">apply_retry_count</span>      <span class="token punctuation">=</span> <span class="token number">15</span>
+  <span class="token property">host</span>                   <span class="token punctuation">=</span> var.eks_cluster_endpoint
+  <span class="token property">cluster_ca_certificate</span> <span class="token punctuation">=</span> base<span class="token number">64</span>decode(var.eks_cluster_ca)
+  <span class="token property">load_config_file</span>       <span class="token punctuation">=</span> <span class="token boolean">false</span>
+
+  <span class="token keyword">exec</span> <span class="token punctuation">{</span>
+    <span class="token property">api_version</span> <span class="token punctuation">=</span> <span class="token string">"client.authentication.k8s.io/v1alpha1"</span>
+    <span class="token property">command</span>     <span class="token punctuation">=</span> <span class="token string">"aws-iam-authenticator"</span>
+    <span class="token property">args</span> <span class="token punctuation">=</span> <span class="token punctuation">[</span>
+      <span class="token string">"token"</span>,
+      <span class="token string">"-i"</span>,
+      module.eks.cluster_id,
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="retry-support"></a><a href="#retry-support" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Retry Support</h3>
 <p>The provider has an additional paramater <code>apply_retry_count</code> that allows kubernetes commands to be retried on failure.
 This is useful if you have flaky CRDs or network connections and need to wait for the cluster state to be back in quorum.
 This applies to both create and update operations.</p>
@@ -117,4 +137,4 @@ YAML</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <p>Updates are also preserved so you can fully manage your kubernetes resources with ease!</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/terraform-provider-kubectl/docs/data_kubectl_filename_list"><span>kubectl_filename_list</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#provider-installation">Provider Installation</a></li><li><a href="#provider-configuration">Provider Configuration</a></li><li><a href="#example">Example</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2019 Gavin Bunney</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="/terraform-provider-kubectl/docs/data_kubectl_filename_list"><span>kubectl_filename_list</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#provider-installation">Provider Installation</a></li><li><a href="#provider-configuration">Provider Configuration</a><ul class="toc-headings"><li><a href="#exec-plugin-support">Exec Plugin Support</a></li><li><a href="#retry-support">Retry Support</a></li></ul></li><li><a href="#example">Example</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2020 Gavin Bunney</section></footer></div></body></html>
