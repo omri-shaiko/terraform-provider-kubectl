@@ -61,7 +61,7 @@
 <span class="token punctuation">}</span>
 
 <span class="token keyword">resource <span class="token type variable">"kubectl_manifest"</span></span> <span class="token string">"test"</span> <span class="token punctuation">{</span>
-    count <span class="token punctuation">=</span> length(data.kubectl_filename_list.manifests.matches)
+    count     <span class="token punctuation">=</span> length(data.kubectl_filename_list.manifests.matches)
     yaml_body <span class="token punctuation">=</span> file(element(data.kubectl_filename_list.manifests.matches, count.index))
 <span class="token punctuation">}</span>
 </code></pre>
