@@ -126,6 +126,59 @@ spec:
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<h3><a class="anchor" aria-hidden="true" id="example-template-with-looping-directive"></a><a href="#example-template-with-looping-directive" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Example Template with Looping Directive</h3>
+<p>Using a directive to generate multiple manifests is possible with using a combination of split and directive within the template:</p>
+<pre><code class="hljs css language-hcl"><span class="token comment">#</span>
+<span class="token comment"># Given the following YAML template</span>
+<span class="token comment">#</span>
+%<span class="token punctuation">{</span> for namespace in split(<span class="token string">","</span>, namespaces) <span class="token punctuation">}</span>
+---
+kind: PersistentVolumeClaim
+apiVersion: v<span class="token number">1</span>
+metadata:
+  name: myvolume-claim
+  namespace: $<span class="token punctuation">{</span>namespace<span class="token punctuation">}</span>
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: <span class="token number">100</span>Gi
+%<span class="token punctuation">{</span> endfor <span class="token punctuation">}</span>
+
+<span class="token comment">#</span>
+<span class="token comment"># Loading the document is a comma-separated list of namespace</span>
+<span class="token comment">#</span>
+<span class="token keyword">data <span class="token type variable">"kubectl_path_documents"</span></span> <span class="token string">"manifests"</span> <span class="token punctuation">{</span>
+    <span class="token property">pattern</span> <span class="token punctuation">=</span> <span class="token string">"./manifests/*.yaml"</span>
+    <span class="token property">vars</span> <span class="token punctuation">=</span> <span class="token punctuation">{</span>
+        namespaces <span class="token punctuation">=</span> <span class="token string">"dev,test,prod"</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">#</span>
+# Results in <span class="token number">3</span> documents:
+#
+---
+kind: PersistentVolumeClaim
+apiVersion: v<span class="token number">1</span>
+metadata:
+  name: myvolume-claim
+  namespace: dev
+---
+kind: PersistentVolumeClaim
+apiVersion: v<span class="token number">1</span>
+metadata:
+  name: myvolume-claim
+  namespace: test
+---
+kind: PersistentVolumeClaim
+apiVersion: v<span class="token number">1</span>
+metadata:
+  name: myvolume-claim
+  namespace: prod
+</code></pre>
 <h2><a class="anchor" aria-hidden="true" id="argument-reference"></a><a href="#argument-reference" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Argument Reference</h2>
 <ul>
 <li><code>pattern</code> - Required. Glob pattern to search for.</li>
@@ -137,4 +190,4 @@ spec:
 <ul>
 <li><code>documents</code> - List of YAML documents (list[string]).</li>
 </ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/terraform-provider-kubectl/docs/data_kubectl_file_documents"><span class="arrow-prev">← </span><span>kubectl_file_documents</span></a><a class="docs-next button" href="/terraform-provider-kubectl/docs/kubectl_manifest"><span>kubectl_manifest</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#example-usage">Example Usage</a><ul class="toc-headings"><li><a href="#load-all-manifest-documents">Load all manifest documents</a></li><li><a href="#example-template">Example Template</a></li><li><a href="#example-template-with-directives">Example Template with Directives</a></li></ul></li><li><a href="#argument-reference">Argument Reference</a></li><li><a href="#attribute-reference">Attribute Reference</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2020 Gavin Bunney</section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/terraform-provider-kubectl/docs/data_kubectl_file_documents"><span class="arrow-prev">← </span><span>kubectl_file_documents</span></a><a class="docs-next button" href="/terraform-provider-kubectl/docs/kubectl_manifest"><span>kubectl_manifest</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#example-usage">Example Usage</a><ul class="toc-headings"><li><a href="#load-all-manifest-documents">Load all manifest documents</a></li><li><a href="#example-template">Example Template</a></li><li><a href="#example-template-with-directives">Example Template with Directives</a></li><li><a href="#example-template-with-looping-directive">Example Template with Looping Directive</a></li></ul></li><li><a href="#argument-reference">Argument Reference</a></li><li><a href="#attribute-reference">Attribute Reference</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="copyright">Copyright © 2020 Gavin Bunney</section></footer></div></body></html>
