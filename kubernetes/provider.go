@@ -3,12 +3,13 @@ package kubernetes
 import (
 	"bytes"
 	"fmt"
+	"log"
+	"os"
+
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/client-go/discovery"
 	"k8s.io/client-go/discovery/cached/memory"
 	"k8s.io/client-go/restmapper"
-	"log"
-	"os"
 
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
@@ -144,9 +145,10 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"kubectl_filename_list":  dataSourceKubectlFilenameList(),
-			"kubectl_file_documents": dataSourceKubectlFileDocuments(),
-			"kubectl_path_documents": dataSourceKubectlPathDocuments(),
+			"kubectl_filename_list":     dataSourceKubectlFilenameList(),
+			"kubectl_file_documents":    dataSourceKubectlFileDocuments(),
+			"kubectl_path_documents":    dataSourceKubectlPathDocuments(),
+			"kubectl_kustomize_overlay": dataSourceKubectlKustomizeOverlay(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
