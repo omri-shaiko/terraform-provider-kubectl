@@ -6,8 +6,7 @@ cd ..
 # This script builds executables for multiple platforms and architectures 
 # it is used by the CI system to output releases. When testing locally it shouldn't be required
 # unless you wish to share a build with someone on a different platform
-# platforms=("linux/amd64" "windows/amd64" "windows/386" "darwin/amd64" "linux/386" "linux/arm")
-platforms=("darwin/amd64")
+platforms=("linux/amd64" "windows/amd64" "windows/386" "darwin/amd64" "linux/386" "linux/arm")
 
 for platform in "${platforms[@]}"
 do
@@ -30,4 +29,3 @@ do
 done
 
 echo "Completed builds, for output see ./bin"
-mv ./bin/terraform-provider-kubectl-darwin-amd64 /Users/omrishaiko/.terraform.d/plugins/terraform-provider-kubectl
